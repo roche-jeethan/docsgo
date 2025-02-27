@@ -172,6 +172,56 @@
       ]
     },
     {
+      "slug": "devops",
+      "language": "DevOps",
+      "icon": "⚙️",
+      "description": "DevOps tools and platforms.",
+      "tools": [
+        {
+          "name": "Docker",
+          "icon": "🐳",
+          "description": "Platform for developing, shipping, and running applications in containers.",
+          "url": "https://www.docker.com/"
+        },
+        {
+          "name": "Kubernetes",
+          "icon": "☸️",
+          "description": "Open-source system for automating deployment, scaling, and management of containerized applications.",
+          "url": "https://kubernetes.io/"
+        },
+        {
+          "name": "Terraform",
+          "icon": "🛠️",
+          "description": "Infrastructure as code tool for building, changing, and versioning infrastructure safely and efficiently.",
+          "url": "https://www.terraform.io/"
+        },
+        {
+          "name": "Ansible",
+          "icon": "🤖",
+          "description": "Open-source automation tool for software provisioning, configuration management, and application deployment.",
+          "url": "https://www.ansible.com/"
+        },
+        {
+          "name": "Jenkins",
+          "icon": "🔧",
+          "description": "Open-source automation server for continuous integration and continuous delivery.",
+          "url": "https://www.jenkins.io/"
+        },
+        {
+          "name": "GitLab CI/CD",
+          "icon": "🦙",
+          "description": "Continuous integration and continuous delivery built into GitLab.",
+          "url": "https://about.gitlab.com/stages-devops-lifecycle/continuous-integration/"
+        },
+        {
+          "name": "CircleCI",
+          "icon": "🔵",
+          "description": "",
+          "url": "https://circleci.com/docs/"
+        }
+      ]
+    },
+    {
       "slug": "web",
       "language": "Web Development",
       "icon": "🌐",
