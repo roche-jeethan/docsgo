@@ -1,31 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import useDarkMode from '../styles/useDarkMode.js';
 
 const Header = () => {
-  const [isDarkMode, setIsDarkMode] = React.useState(false);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (savedTheme === 'dark' || (savedTheme === null && prefersDark)) {
-      document.documentElement.classList.add('dark');
-      setIsDarkMode(true);
-    } else {
-      document.documentElement.classList.remove('dark');
-      setIsDarkMode(false);
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    if (document.documentElement.classList.contains('dark')) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      setIsDarkMode(false);
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-      setIsDarkMode(true);
-    }
+  const [darkMode, setDarkMode] = useDarkMode();
+  
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
   };
 
   return (
@@ -38,10 +18,10 @@ const Header = () => {
           <div className="flex items-center">
             <button
               type="button"
-              onClick={toggleTheme}
+              onClick={toggleDarkMode}
               className="p-2 ml-4 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer"
             >
-              {isDarkMode ? '☀️ Light' : '🌙 Dark'} Mode
+              Theme Mode
             </button>
           </div>
         </div>
