@@ -1,32 +1,61 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import information from '../../data/information.json';
+import { supabase } from '../../lib/supabase';
 
-export function getStaticPaths() {
-  return information.map(category => ({
+export async function getStaticPaths() {
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('slug');
+  
+  return categories?.map(category => ({
     params: { slug: category.slug }
-  }));
+  })) || [];
 }
 
 const { slug } = Astro.params;
-const category = information.find(item => item.slug === slug);
 
-if (!category) {
-  throw Astro.redirect('/404');
-}
+// Fetch category data with tools
+const { data: category } = await supabase
+  .from('categories')
+  .select(`
+    *,
+    tools:tools(*)
+  `)
+  .eq('slug', slug)
+  .single();
 ---
 
-<Layout title={category.language}>
-  <h1 class="text-3xl font-bold mb-4">{category.icon} {category.language}</h1>
-  <p class="mb-4">{category.description}</p>
-
-  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-    {category.tools.map(tool => (
-      <a href={tool.url} target="_blank" class="p-4 bg-white shadow-md rounded-lg hover:shadow-xl transition">
-        <div class="text-3xl">{tool.icon}</div>
-        <h3 class="text-lg font-semibold">{tool.name}</h3>
-        <p class="text-sm text-gray-600">{tool.description}</p>
-      </a>
-    ))}
+<Layout title={category?.language || 'Category'}>
+  <div class="mb-4">
+    <a href="/" class="text-blue-500 hover:underline">← Back to categories</a>
   </div>
+  
+  {category ? (
+    <div>
+      <div class="flex items-center mb-4">
+        <span class="text-4xl mr-3">{category.icon}</span>
+        <h1 class="text-3xl font-bold">{category.language}</h1>
+      </div>
+      <p class="text-xl text-gray-600 mb-8">{category.description}</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {category.tools?.map((tool: { url: string, icon: string, name: string, description: string }) => (
+          <a 
+            href={tool.url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="block p-4 bg-white rounded-lg shadow hover:shadow-lg transition"
+          >
+            <div class="flex items-center mb-2">
+              <span class="text-2xl mr-2">{tool.icon}</span>
+              <h2 class="text-xl font-semibold">{tool.name}</h2>
+            </div>
+            <p class="text-gray-600">{tool.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <p>Category not found</p>
+  )}
 </Layout>

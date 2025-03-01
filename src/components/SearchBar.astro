@@ -1,0 +1,78 @@
+---
+// filepath: /home/jeethan-roche/Projects/docsgo-astro/src/components/SearchBar.astro
+const { data } = Astro.props;
+---
+
+<input
+  type="text"
+  id="searchInput"
+  placeholder="Search for languages, frameworks, or tools..."
+  class="w-full p-2 border border-gray-300 rounded-md"
+/>
+
+<section id="searchResults" class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
+  {
+    data.map((category: {
+      language: string;
+      description: string;
+      tools: { icon: string; name: string }[];
+      slug: string;
+      icon: string;
+    }) => (
+      <div
+        class="category-item p-4 bg-white shadow-md rounded-lg hover:shadow-xl transition"
+        data-searchable={JSON.stringify({
+          language: category.language,
+          description: category.description,
+          tools: category.tools
+        })}
+      >
+        <a href={`/categories/${category.slug}`} class="block">
+          <div class="text-3xl">{category.icon}</div>
+          <h2 class="text-xl font-semibold">{category.language}</h2>
+          <div class="mt-2 text-sm text-gray-600">
+            {category.tools.map((tool: { icon: string; name: string }) => (
+              <span class="inline-block mr-2 mb-1 px-2 py-1 bg-gray-100 rounded">
+                {tool.icon} {tool.name}
+              </span>
+            ))}
+          </div>
+        </a>
+      </div>
+    ))
+  }
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("searchInput");
+    const categoryItems = document.querySelectorAll(".category-item");
+
+    function searchItems(query) {
+      query = query.toLowerCase().trim();
+      
+      if (query === "") {
+        categoryItems.forEach(item => item.style.display = "block");
+        return;
+      }
+
+      categoryItems.forEach(item => {
+        const data = JSON.parse(item.dataset.searchable);
+        const searchableContent = [
+          data.language,
+          data.description,
+          ...data.tools.map(tool => [
+            tool.name,
+            tool.description
+          ]).flat()
+        ].join(" ").toLowerCase();
+
+        item.style.display = searchableContent.includes(query) ? "block" : "none";
+      });
+    }
+
+    searchInput.addEventListener("input", (e) => {
+      searchItems(e.target.value);
+    });
+  });
+</script>

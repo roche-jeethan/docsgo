@@ -1,10 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import SearchContainer from '../components/SearchContainer';
-import information from '../data/information.json';
+import Card from '../components/Card.astro';
+import SearchBar from '../components/SearchBar.astro';
+import { supabase } from '../lib/supabase';
+
+// Fetch categories with their tools
+const { data: categories, error } = await supabase
+  .from('categories')
+  .select(`
+    *,
+    tools:tools(*)
+  `)
+  .order('language');
+
+if (error) {
+  console.error('Error fetching data:', error);
+}
 ---
 
-<Layout title="Home">
-  <h1 class="text-3xl font-bold mb-4">Welcome to DocsGo</h1>
-  <SearchContainer client:load data={information} />
+<Layout title="Welcome to DocsGo">
+  <h1>Welcome to DocsGo</h1>
+  <SearchBar data={categories || []} />
+  <!-- Rest of your component -->
 </Layout>

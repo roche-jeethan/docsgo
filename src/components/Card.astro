@@ -1,0 +1,98 @@
+---
+// filepath: /home/jeethan-roche/Projects/docsgo-astro/src/components/Card.astro
+// Props interface to define the expected props
+interface Props {
+  slug: string;
+  language: string;
+  icon: string;
+  description: string;
+  tools?: any[];
+  isLink?: boolean;
+  url?: string;
+}
+
+// Destructure the props
+const { 
+  slug,
+  language,
+  icon,
+  description, 
+  tools = [],
+  isLink = true,
+  url
+} = Astro.props;
+
+// Determine the URL to use (either the provided URL or constructed from slug)
+const href = url || `/categories/${slug}`;
+---
+
+<div class="card-container h-full">
+  {isLink ? (
+    <a 
+      href={href} 
+      target={url ? "_blank" : "_self"} 
+      rel={url ? "noopener noreferrer" : ""} 
+      class="block h-full"
+    >
+      <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+        <div class="flex items-center mb-4">
+          <span class="text-3xl mr-3" aria-hidden="true">{icon}</span>
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white">{language}</h2>
+        </div>
+        
+        <p class="text-gray-600 dark:text-gray-300 mb-4 flex-grow">{description}</p>
+        
+        {tools && tools.length > 0 && (
+          <div class="mt-auto">
+            <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+              {tools.length} tools available
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {tools.slice(0, 3).map(tool => (
+                <span class="inline-flex items-center px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                  {tool.icon && <span class="mr-1">{tool.icon}</span>}
+                  {tool.name}
+                </span>
+              ))}
+              {tools.length > 3 && (
+                <span class="inline-flex items-center px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                  +{tools.length - 3} more
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </a>
+  ) : (
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md h-full flex flex-col">
+      <div class="flex items-center mb-4">
+        <span class="text-3xl mr-3" aria-hidden="true">{icon}</span>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white">{language}</h2>
+      </div>
+      
+      <p class="text-gray-600 dark:text-gray-300 mb-4 flex-grow">{description}</p>
+      
+      {tools && tools.length > 0 && (
+        <div class="mt-auto">
+          <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+            {tools.length} tools available
+          </div>
+          <div class="flex flex-wrap gap-2">
+            {tools.slice(0, 3).map(tool => (
+              <span class="inline-flex items-center px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                {tool.icon && <span class="mr-1">{tool.icon}</span>}
+                {tool.name}
+              </span>
+            ))}
+            {tools.length > 3 && (
+              <span class="inline-flex items-center px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                +{tools.length - 3} more
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )}
+</div>
