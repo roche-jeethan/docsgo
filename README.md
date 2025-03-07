@@ -35,7 +35,8 @@ This project is built with cutting-edge web technologies:
 
 - **Astro**  
 - **Tailwind CSS**
-
+- **React**
+- 
 ---
 
 ## 🌍 Website Link
